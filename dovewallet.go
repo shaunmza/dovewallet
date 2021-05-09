@@ -28,7 +28,7 @@ type DoveWallet struct {
 type DoveWalletClient interface {
 	GetBalances() (balanceResponse BalanceResponse, err error)
 	GetOrderHistory(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error)
-	GetOrder(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error)
+	GetOrder(uuid string) (orderResponse OrderResponse, err error)
 	GetOpenOrders(market string, walletId int64) (orderHistoryResponse OrderHistoryResponse, err error)
 	OpenLimitOrder(direction, market string, quantity, rate decimal.Decimal, walletId int64) (limitOrderResponse OrderResponse, err error)
 }
