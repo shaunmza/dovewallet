@@ -30,7 +30,7 @@ type DoveWalletClient interface {
 	GetOrderHistory(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error)
 	GetOrder(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error)
 	GetOpenOrders(market string, walletId int64) (orderHistoryResponse OrderHistoryResponse, err error)
-	CreateOrder(params btx.CreateOrderParams) (orderResponse LimitOrderResponse, err error)
+	OpenLimitOrder(direction, market string, quantity, rate decimal.Decimal, walletId int64) (limitOrderResponse OrderResponse, err error)
 }
 
 // set enable/disable http request/response dump
