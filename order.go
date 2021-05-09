@@ -2,7 +2,6 @@ package dovewallet
 
 import (
 	"github.com/shopspring/decimal"
-	"time"
 )
 
 type OrderResponse struct {

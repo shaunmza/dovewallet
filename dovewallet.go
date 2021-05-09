@@ -3,7 +3,6 @@ package dovewallet
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/google/go-querystring/query"
 	"github.com/shopspring/decimal"
 	"time"
 )
