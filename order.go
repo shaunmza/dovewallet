@@ -1,6 +1,9 @@
 package dovewallet
 
-import "github.com/shopspring/decimal"
+import (
+	"github.com/shopspring/decimal"
+	"time"
+)
 
 type OrderResponse struct {
 	Success bool   `json:"success"`
@@ -35,7 +38,7 @@ type Order struct {
 	Uuid              string          `json:"Uuid"`
 	OrderUuid         int64           `json:"OrderUuid"`
 	Exchange          string          `json:"Exchange"`
-	TimeStamp         string          `json:"TimeStamp"`
+	TimeStamp         jTime          `json:"TimeStamp"`
 	OrderType         string          `json:"OrderType"`
 	Limit             decimal.Decimal `json:"Limit"`
 	Magic             int             `json:"Magic"`
@@ -45,7 +48,7 @@ type Order struct {
 	Price             decimal.Decimal `json:"Price"`
 	PricePerUnit      decimal.Decimal `json:"PricePerUnit"`
 	IsConditional     bool            `json:"IsConditional"`
-	Opened            string          `json:"Opened"`
-	Closed            string          `json:"Closed"`
+	Opened            jTime          `json:"Opened"`
+	Closed            jTime          `json:"Closed"`
 	IsOpen            bool            `json:"IsOpen"`
 }

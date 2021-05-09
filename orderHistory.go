@@ -12,5 +12,5 @@ type OrderHistoryParams struct {
 	Market         string `url:"market"`
 	WalletId       int64  `url:"walletId,omitempty"`
 	Count          int    `url:"count,omitempty"`
-	StartAt        string `url:"startAt,omitempty"`
+	StartAt        jTime `url:"startAt,omitempty"`
 }

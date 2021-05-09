@@ -11,7 +11,6 @@ import (
 const (
 	API_BASE    = "https://api.dovewallet.com/"
 	API_VERSION = "v1.1"
-	TIME_FORMAT = "2006-01-02T15:04:05"
 )
 
 // New returns an instantiated dovewallet struct
@@ -53,22 +52,14 @@ func (d *DoveWallet) GetBalances() (balanceResponse BalanceResponse, err error) 
 func (d *DoveWallet) GetOrderHistory(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error) {
 	from := ""
 	if startAt != nil {
-		from = startAt.Format(TIME_FORMAT)
+		from = "&startat=" + startAt.Format(TIME_FORMAT)
 	}
 
-	var params = OrderHistoryParams{
-		Market:   market,
-		WalletId: walletId,
-		Count:    count,
-		StartAt:  from,
-	}
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
 	resource := "account/getorderhistory"
-	if len(queryParams) != 0 {
-		resource += "?"
+	r, err := d.client.do("GET", resource+fmt.Sprintf("?market=%s%s", market, from), "", true)
+	if err != nil {
+		return
 	}
-	r, err := d.client.do("GET", resource+queryParams, "", true)
 	if err != nil {
 		return
 	}
@@ -90,18 +81,9 @@ func (d *DoveWallet) GetOrder(uuid string) (orderResponse OrderResponse, err err
 }
 
 func (d *DoveWallet) GetOpenOrders(market string, walletId int64) (orderHistoryResponse OrderHistoryResponse, err error) {
-
-	var params = OpenOrderParams{
-		Market:   market,
-		WalletId: walletId,
-	}
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
 	resource := "market/getopenorders"
-	if len(queryParams) != 0 {
-		resource += "?"
-	}
-	r, err := d.client.do("GET", resource+queryParams, "", true)
+
+	r, err := d.client.do("GET", resource+fmt.Sprintf("?market=%s", market), "", true)
 	if err != nil {
 		return
 	}
