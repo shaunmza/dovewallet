@@ -13,6 +13,10 @@ type jTime time.Time
 
 func (jt *jTime) UnmarshalJSON(data []byte) error {
 	var s string
+	if len(data) == 0 || string(data) == "null" {
+		return nil
+	}
+
 	if err := json.Unmarshal(data, &s); err != nil {
 		return err
 	}

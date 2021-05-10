@@ -23,8 +23,17 @@ type DoveWallet struct {
 	client *client
 }
 
+type requestParams struct {
+	Params []requestParam
+}
+
+type requestParam struct {
+	Key string
+	Value string
+}
+
 type DoveWalletClient interface {
-	GetBalances() (balanceResponse BalanceResponse, err error)
+	GetBalances() (balanceResponse BalancesResponse, err error)
 	GetOrderHistory(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error)
 	GetOrder(uuid string) (orderResponse OrderResponse, err error)
 	GetOpenOrders(market string, walletId int64) (orderHistoryResponse OrderHistoryResponse, err error)
@@ -39,8 +48,8 @@ func (c *DoveWallet) SetDebug(enable bool) {
 // Account
 
 // GetBalances is used to retrieve all balances from your account
-func (d *DoveWallet) GetBalances() (balanceResponse BalanceResponse, err error) {
-	r, err := d.client.do("GET", "account/getbalances", "", true)
+func (d *DoveWallet) GetBalances() (balanceResponse BalancesResponse, err error) {
+	r, err := d.client.do("GET", "account/getbalances", requestParams{}, true)
 	if err != nil {
 		return
 	}
@@ -49,13 +58,16 @@ func (d *DoveWallet) GetBalances() (balanceResponse BalanceResponse, err error) 
 }
 
 func (d *DoveWallet) GetOrderHistory(market string, walletId int64, count int, startAt *time.Time) (orderHistoryResponse OrderHistoryResponse, err error) {
-	from := ""
+	reqParams := requestParams{}
+
 	if startAt != nil {
-		from = "&startat=" + startAt.Format(TIME_FORMAT)
+		reqParams.Params = append(reqParams.Params, requestParam{Key: "startat", Value:startAt.Format(TIME_FORMAT)})
 	}
 
+	reqParams.Params = append(reqParams.Params, requestParam{Key: "market", Value:market})
+
 	resource := "account/getorderhistory"
-	r, err := d.client.do("GET", resource, fmt.Sprintf("&market=%s%s", market, from), true)
+	r, err := d.client.do("GET", resource, reqParams, true)
 	if err != nil {
 		return
 	}
@@ -67,10 +79,11 @@ func (d *DoveWallet) GetOrderHistory(market string, walletId int64, count int, s
 }
 
 func (d *DoveWallet) GetOrder(uuid string) (orderResponse OrderResponse, err error) {
+reqParams := requestParams{[]requestParam{{Key: "uuid", Value: uuid}}}
 
-	resource := "account/getorder?uuid=" + uuid
+	resource := "account/getorder"
 
-	r, err := d.client.do("GET", resource, "", true)
+	r, err := d.client.do("GET", resource, reqParams, true)
 	if err != nil {
 		return
 	}
@@ -82,26 +95,47 @@ func (d *DoveWallet) GetOrder(uuid string) (orderResponse OrderResponse, err err
 func (d *DoveWallet) GetOpenOrders(market string, walletId int64) (orderHistoryResponse OrderHistoryResponse, err error) {
 	resource := "market/getopenorders"
 
-	r, err := d.client.do("GET", resource+fmt.Sprintf("?market=%s", market), "", true)
+	reqParams := requestParams{[]requestParam{{Key: "market", Value: market}}}
+
+	r, err := d.client.do("GET", resource, reqParams, true)
 	if err != nil {
 		return
 	}
+	fmt.Println(string(r))
 	err = json.Unmarshal(r, &orderHistoryResponse)
 	return
 }
 
 func (d *DoveWallet) OpenLimitOrder(direction, market string, quantity, rate decimal.Decimal, walletId int64) (limitOrderResponse OrderResponse, err error) {
-
 	orderType := "buylimit"
 	if direction == "SELL" {
 		orderType = "selllimit"
 	}
 
-	r, err := d.client.do("GET", fmt.Sprintf("market/%s?market=%s&quantity=%s&rate=%s", orderType, market, quantity.String(), rate.String()), "", true)
+	resource :="market/" + orderType
+
+	reqParams := requestParams{[]requestParam{
+		{Key: "market", Value: market},
+		{Key: "quantity", Value: quantity.String()},
+		{Key: "rate", Value: rate.String()},
+	},
+	}
+
+	r, err := d.client.do("GET", resource, reqParams, true)
 	if err != nil {
 		return
 	}
 
-	err = json.Unmarshal(r, &limitOrderResponse)
+	err = json.Unmarshal(r, &limitOrderResponse)/**/
 	return
+}
+
+func (rp requestParams) Len() int {
+	return len(rp.Params)
+}
+func (rp requestParams) Swap(i, j int) {
+	rp.Params[i], rp.Params[j] = rp.Params[j], rp.Params[i]
+}
+func (rp requestParams) Less(i, j int) bool {
+	return rp.Params[i].Key < rp.Params[j].Key
 }

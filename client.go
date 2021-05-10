@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"sort"
 )
 
 type client struct {
@@ -23,28 +24,42 @@ type client struct {
 	debug       bool
 }
 
+
 // NewClient return a new Dove Wallet HTTP client
 func NewClient(apiKey, apiSecret string) (c *client) {
 	return &client{apiKey, apiSecret, &http.Client{}, 30 * time.Second, false}
 }
 
 // do prepare and process HTTP request to Dove Wallet API
-func (c *client) do(method string, resource string, payload string, authNeeded bool) (response []byte, err error) {
+func (c *client) do(method string, resource string, reqParams requestParams, authNeeded bool) (response []byte, err error) {
 	connectTimer := time.NewTimer(c.httpTimeout)
 
 	// Unix timestamp in milliseconds
 	nonce := time.Now().Unix() * 1000
-	//1620596910424
+
+	reqParams.Params = append(reqParams.Params, requestParam{Key: "apikey", Value: c.apiKey}, requestParam{Key:"nonce", Value: strconv.FormatInt(nonce, 10)})
+	sort.Sort(reqParams)
+
+	params := ""
+	first := true
+	for _, v := range reqParams.Params {
+		if first {
+			params = "?"
+			first = false
+		} else {
+			params = params + "&"
+		}
+		params = fmt.Sprintf("%s%s=%s", params, v.Key, v.Value)
+	}
 
 	var rawurl string
 	if strings.HasPrefix(resource, "http") {
 		rawurl = resource
 	} else {
-		rawurl = fmt.Sprintf("%s%s/%s?apikey=%s&nonce=%s%s", API_BASE, API_VERSION, resource, c.apiKey, strconv.FormatInt(nonce, 10), payload)
+		rawurl = fmt.Sprintf("%s%s/%s%s", API_BASE, API_VERSION, resource, params)
 	}
-	fmt.Println("url: ", rawurl)
 
-	req, err := http.NewRequest(method, rawurl, strings.NewReader(payload))
+	req, err := http.NewRequest(method, rawurl, strings.NewReader(""))
 	if err != nil {
 		return
 	}
@@ -75,7 +90,6 @@ func (c *client) do(method string, resource string, payload string, authNeeded b
 
 	defer resp.Body.Close()
 	response, err = ioutil.ReadAll(resp.Body)
-	//fmt.Println(fmt.Sprintf("reponse %s", response), err)
 	if err != nil {
 		return response, err
 	}

@@ -4,8 +4,8 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-type BalanceResponse struct {
-	Currency bool      `json:"success"`
+type BalancesResponse struct {
+	Success bool      `json:"success"`
 	Message  string    `json:"message"`
 	Result   []Balance `json:"result"`
 }

@@ -3,7 +3,7 @@ package dovewallet
 type OrderHistoryResponse struct {
 	Success bool    `json:"success"`
 	Message string  `json:"message"`
-	Result  []Order `json:"result"`
+	Result  []Order `json:"result,omitempty"`
 }
 
 type OrderHistoryParams struct {
