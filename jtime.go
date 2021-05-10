@@ -1,15 +1,15 @@
 package dovewallet
 
 import (
-"encoding/json"
-"time"
+	"encoding/json"
+	"time"
+	"fmt"
 )
 
 const TIME_FORMAT = "2006-01-02T15:04:05"
 
-type jTime struct {
-	time.Time
-}
+type jTime time.Time
+
 
 func (jt *jTime) UnmarshalJSON(data []byte) error {
 	var s string
@@ -20,10 +20,15 @@ func (jt *jTime) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	jt.Time = t
+	*jt = jTime(t)
 	return nil
 }
 
 func (jt jTime) MarshalJSON() ([]byte, error) {
-	return json.Marshal((*time.Time)(&jt.Time).Format(TIME_FORMAT))
+	return []byte(jt.String()), nil
+}
+
+func (jt *jTime) String() string {
+	t := time.Time(*jt)
+	return fmt.Sprintf("%q", t.Format(TIME_FORMAT))
 }
