@@ -6,8 +6,8 @@ import (
 
 type BalancesResponse struct {
 	Success bool      `json:"success"`
-	Message  string    `json:"message"`
-	Result   []Balance `json:"result"`
+	Message string    `json:"message"`
+	Result  []Balance `json:"result"`
 }
 
 type Balance struct {

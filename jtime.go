@@ -2,14 +2,13 @@ package dovewallet
 
 import (
 	"encoding/json"
-	"time"
 	"fmt"
+	"time"
 )
 
 const TIME_FORMAT = "2006-01-02T15:04:05"
 
 type jTime time.Time
-
 
 func (jt *jTime) UnmarshalJSON(data []byte) error {
 	var s string

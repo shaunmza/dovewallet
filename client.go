@@ -10,10 +10,10 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
-	"sort"
 )
 
 type client struct {
@@ -23,7 +23,6 @@ type client struct {
 	httpTimeout time.Duration
 	debug       bool
 }
-
 
 // NewClient return a new Dove Wallet HTTP client
 func NewClient(apiKey, apiSecret string) (c *client) {
@@ -37,7 +36,7 @@ func (c *client) do(method string, resource string, reqParams requestParams, aut
 	// Unix timestamp in milliseconds
 	nonce := time.Now().Unix() * 1000
 
-	reqParams.Params = append(reqParams.Params, requestParam{Key: "apikey", Value: c.apiKey}, requestParam{Key:"nonce", Value: strconv.FormatInt(nonce, 10)})
+	reqParams.Params = append(reqParams.Params, requestParam{Key: "apikey", Value: c.apiKey}, requestParam{Key: "nonce", Value: strconv.FormatInt(nonce, 10)})
 	sort.Sort(reqParams)
 
 	params := ""

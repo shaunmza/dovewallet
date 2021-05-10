@@ -25,7 +25,7 @@ func TestClient_GetOpenOrders(t *testing.T) {
 
 	c := DoveWallet{r}
 
-	orderResponse, err := c.GetOpenOrders("USDT-BTC",0 )
+	orderResponse, err := c.GetOpenOrders("USDT-BTC", 0)
 	require.NoError(t, err)
 	require.Equal(t, true, orderResponse.Success)
 }

@@ -35,9 +35,9 @@ type OrderId struct {
 type Order struct {
 	AccountId         string          `json:"AccountId"`
 	Uuid              string          `json:"Uuid"`
-	OrderUuid         string           `json:"OrderUuid"`
+	OrderUuid         string          `json:"OrderUuid"`
 	Exchange          string          `json:"Exchange"`
-	TimeStamp         jTime          `json:"TimeStamp,omitempty"`
+	TimeStamp         jTime           `json:"TimeStamp,omitempty"`
 	OrderType         string          `json:"OrderType"`
 	Limit             decimal.Decimal `json:"Limit"`
 	Magic             int             `json:"Magic"`
@@ -47,7 +47,7 @@ type Order struct {
 	Price             decimal.Decimal `json:"Price"`
 	PricePerUnit      decimal.Decimal `json:"PricePerUnit"`
 	IsConditional     bool            `json:"IsConditional"`
-	Opened            jTime          `json:"Opened,omitempty"`
-	Closed            jTime          `json:"Closed,omitempty"`
+	Opened            jTime           `json:"Opened,omitempty"`
+	Closed            jTime           `json:"Closed,omitempty"`
 	IsOpen            bool            `json:"IsOpen"`
 }

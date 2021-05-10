@@ -28,7 +28,7 @@ type requestParams struct {
 }
 
 type requestParam struct {
-	Key string
+	Key   string
 	Value string
 }
 
@@ -61,10 +61,10 @@ func (d *DoveWallet) GetOrderHistory(market string, walletId int64, count int, s
 	reqParams := requestParams{}
 
 	if startAt != nil {
-		reqParams.Params = append(reqParams.Params, requestParam{Key: "startat", Value:startAt.Format(TIME_FORMAT)})
+		reqParams.Params = append(reqParams.Params, requestParam{Key: "startat", Value: startAt.Format(TIME_FORMAT)})
 	}
 
-	reqParams.Params = append(reqParams.Params, requestParam{Key: "market", Value:market})
+	reqParams.Params = append(reqParams.Params, requestParam{Key: "market", Value: market})
 
 	resource := "account/getorderhistory"
 	r, err := d.client.do("GET", resource, reqParams, true)
@@ -79,7 +79,7 @@ func (d *DoveWallet) GetOrderHistory(market string, walletId int64, count int, s
 }
 
 func (d *DoveWallet) GetOrder(uuid string) (orderResponse OrderResponse, err error) {
-reqParams := requestParams{[]requestParam{{Key: "uuid", Value: uuid}}}
+	reqParams := requestParams{[]requestParam{{Key: "uuid", Value: uuid}}}
 
 	resource := "account/getorder"
 
@@ -112,7 +112,7 @@ func (d *DoveWallet) OpenLimitOrder(direction, market string, quantity, rate dec
 		orderType = "selllimit"
 	}
 
-	resource :="market/" + orderType
+	resource := "market/" + orderType
 
 	reqParams := requestParams{[]requestParam{
 		{Key: "market", Value: market},
@@ -126,7 +126,7 @@ func (d *DoveWallet) OpenLimitOrder(direction, market string, quantity, rate dec
 		return
 	}
 
-	err = json.Unmarshal(r, &limitOrderResponse)/**/
+	err = json.Unmarshal(r, &limitOrderResponse) /**/
 	return
 }
 
