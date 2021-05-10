@@ -55,7 +55,7 @@ func (d *DoveWallet) GetOrderHistory(market string, walletId int64, count int, s
 	}
 
 	resource := "account/getorderhistory"
-	r, err := d.client.do("GET", resource+fmt.Sprintf("?market=%s%s", market, from), "", true)
+	r, err := d.client.do("GET", resource, fmt.Sprintf("&market=%s%s", market, from), true)
 	if err != nil {
 		return
 	}

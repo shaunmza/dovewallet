@@ -40,11 +40,7 @@ func (c *client) do(method string, resource string, payload string, authNeeded b
 	if strings.HasPrefix(resource, "http") {
 		rawurl = resource
 	} else {
-		paramSep := "?"
-		if strings.Contains(resource, paramSep){
-			paramSep = "&"
-		}
-		rawurl = fmt.Sprintf("%s%s/%s%sapikey=%s&nonce=%s", API_BASE, API_VERSION, resource, paramSep, c.apiKey, strconv.FormatInt(nonce, 10))
+		rawurl = fmt.Sprintf("%s%s/%s?apikey=%s&nonce=%s%s", API_BASE, API_VERSION, resource, c.apiKey, strconv.FormatInt(nonce, 10), payload)
 	}
 	fmt.Println("url: ", rawurl)
 
