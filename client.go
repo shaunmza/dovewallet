@@ -41,7 +41,7 @@ func (c *client) do(method string, resource string, payload string, authNeeded b
 		rawurl = resource
 	} else {
 		paramSep := "?"
-		if strings.Contains(rawurl, paramSep){
+		if strings.Contains(resource, paramSep){
 			paramSep = "&"
 		}
 		rawurl = fmt.Sprintf("%s%s/%s%sapikey=%s&nonce=%s", API_BASE, API_VERSION, resource, paramSep, c.apiKey, strconv.FormatInt(nonce, 10))
