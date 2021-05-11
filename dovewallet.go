@@ -103,6 +103,7 @@ func (d *DoveWallet) GetOpenOrders(market string, walletId int64) (orderHistoryR
 	}
 	fmt.Println(string(r))
 	err = json.Unmarshal(r, &orderHistoryResponse)
+
 	return
 }
 

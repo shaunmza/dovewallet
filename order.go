@@ -48,6 +48,6 @@ type Order struct {
 	PricePerUnit      decimal.Decimal `json:"PricePerUnit"`
 	IsConditional     bool            `json:"IsConditional"`
 	Opened            jTime           `json:"Opened,omitempty"`
-	Closed            jTime           `json:"Closed,omitempty"`
+	Closed            *jTime          `json:"Closed,omitempty"`
 	IsOpen            bool            `json:"IsOpen"`
 }

@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	API_KEY    = "fuhhavpyqnekj2itr3r4qgoic3ymhequjmqtuao57r3f2ub3sz"
-	API_SECRET = "mj5miheslkqt6ydjkfx2ebqiea5whmmc2lxu253k7h6zwbqv5o"
+	API_KEY    = ""
+	API_SECRET = ""
 )
 
 func TestClient_GetBalances(t *testing.T) {

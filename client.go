@@ -34,7 +34,7 @@ func (c *client) do(method string, resource string, reqParams requestParams, aut
 	connectTimer := time.NewTimer(c.httpTimeout)
 
 	// Unix timestamp in milliseconds
-	nonce := time.Now().Unix() * 1000
+	nonce := time.Now().UnixNano()
 
 	reqParams.Params = append(reqParams.Params, requestParam{Key: "apikey", Value: c.apiKey}, requestParam{Key: "nonce", Value: strconv.FormatInt(nonce, 10)})
 	sort.Sort(reqParams)
