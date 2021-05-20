@@ -121,7 +121,7 @@ func (c *client) doTimeoutRequest(timer *time.Timer, req *http.Request) (*http.R
 	case r := <-done:
 		return r.resp, r.err
 	case <-timer.C:
-		return nil, errors.New("timeout on reading data from Fove Wallet API")
+		return nil, errors.New("timeout on reading data from Dove Wallet API")
 	}
 }
 

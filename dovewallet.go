@@ -2,7 +2,6 @@ package dovewallet
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/shopspring/decimal"
 	"time"
 )
@@ -101,7 +100,6 @@ func (d *DoveWallet) GetOpenOrders(market string, walletId int64) (orderHistoryR
 	if err != nil {
 		return
 	}
-	fmt.Println(string(r))
 	err = json.Unmarshal(r, &orderHistoryResponse)
 
 	return
